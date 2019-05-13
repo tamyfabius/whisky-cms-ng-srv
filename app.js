@@ -4,6 +4,8 @@ const api       = require('./api/v1');
 const app       = express();
 const PORT      = process.env.PORT || 3000;
 
+const mongoose = require('mongoose');
+const connection = mongoose.connection;
 app.set('port', PORT);
 
 app.use(cors());
@@ -14,8 +16,19 @@ app.use((req, res) => {
     res.json({msg: err.message, error: err});
 });
 
-app.listen(app.get('port'), () => {
-    console.log(`Express server listening on PORT: ${app.get('port')} !!`);
+
+mongoose.connect('mongodb://localhost/whiskycms', { useNewUrlParser: true});
+
+connection.on('error', (err) => {
+    console.error(`connection to mongodb error: ${err.message}`);
+});
+
+connection.once('open', () => {
+    console.log('Connected to MongoDB')
+
+    app.listen(app.get('port'), () => {
+        console.log(`Express server listening on PORT: ${app.get('port')} !!`);
+    });
 });
 
 
