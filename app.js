@@ -16,7 +16,6 @@ app.use((req, res) => {
     res.json({msg: err.message, error: err});
 });
 
-
 mongoose.connect('mongodb://localhost/whiskycms', { useNewUrlParser: true});
 
 connection.on('error', (err) => {

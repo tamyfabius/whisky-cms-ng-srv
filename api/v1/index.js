@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const BlogPost = require('../models/blogPost');
 
 router.get('/ping', (req, res) => {
     res.status(200).json({ msg: 'ping', data: new Date()});
@@ -32,5 +33,16 @@ router.get('/blog-posts', (req, res) => {
     ];
     res.status(200).json(posts);
 }); // localhost:3000/api/v1/blog-posts
+
+router.post('/blog-posts', (req, res) => {
+    console.log('req.body', req.body);
+    const blogPost = new BlogPost(req.body);
+    blogPost.save((err, blogPost) => {
+        if(err) {
+            return res.status(500).json(err);
+        }
+        res.status(201).json(blogPost);
+    })
+});
 
 module.exports = router;
